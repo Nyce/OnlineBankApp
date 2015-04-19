@@ -1,0 +1,2 @@
+open_account_url = http://localhost:8181/BankService/service/create
+login_url = http://localhost:8181/BankService/service/login

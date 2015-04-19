@@ -1,0 +1,13 @@
+firstname.empty = firstname cannot be empty
+lastname.empty = lastname cannot be empty
+address.empty = address cannot be empty
+city.empty = city cannot be empty
+state.empty = state cannot be empty
+zip.empty = zip code cannot be empty
+dob.empty = date of birth cannot be empty
+email.empty = email cannot be empty
+sex.empty = sex cannot be empty
+username.empty = username cannot be empty
+password.empty = password cannot be empty
+balance.empty = balance cannot be empty
+description.empty = description cannot be empty
