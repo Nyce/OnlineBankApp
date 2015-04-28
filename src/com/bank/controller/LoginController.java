@@ -10,37 +10,26 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.http.MediaType;
 
-import com.bank.exceptions.LoginException;
-import com.bank.model.Account;
-import com.bank.model.Output;
 import com.bank.model.User;
 import com.bank.validator.UserValidator;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.grails.datastore.gorm.rest.client.json.JsonHttpMessageConverter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -223,6 +212,7 @@ public class LoginController {
 
 
 	/**
+	 * This method sets the banking account type
 	 * @param mv
 	 * @param acctType
 	 */
@@ -236,18 +226,20 @@ public class LoginController {
 	}
 
 	/**
+	 * This method creates a spring Rest Template
 	 * @param httpHeaders
 	 * @return RestTemplate
 	 */
 	public RestTemplate createRestTemp(HttpHeaders httpHeaders) {
 		httpHeaders.add("Content-Type", "*/*");
-		RestTemplate rest = new RestTemplate();
-		rest.getMessageConverters().add(new StringHttpMessageConverter());
-		return rest;
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+		return restTemplate;
 	}
 
 
 	/**
+	 * This method adds the Login Exception message to the ModelAndView
 	 * @return ModelAndView
 	 */
 	@RequestMapping(value="loginFailure", method = RequestMethod.POST)

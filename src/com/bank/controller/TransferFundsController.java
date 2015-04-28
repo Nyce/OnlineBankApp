@@ -25,8 +25,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.capitalone.bank.model.Account;
-import com.capitalone.bank.model.User;
+import com.bank.model.Account;
+import com.bank.model.User;
 
 @Controller
 @RequestMapping("/")

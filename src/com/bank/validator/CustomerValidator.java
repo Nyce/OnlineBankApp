@@ -6,13 +6,10 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.capitalone.bank.model.Account;
-import com.capitalone.bank.model.Customer;
-import com.capitalone.bank.model.Transaction;
-import com.capitalone.bank.model.User;
+import com.bank.model.Customer;
+
 
 public class CustomerValidator implements Validator {
 
@@ -33,8 +30,6 @@ public class CustomerValidator implements Validator {
 			System.out.println(ie);
 		}
 		Customer customer = (Customer) obj;
-		String exceptionMessage = "";
-
 
 
 //		if (customer.getZip() < 00000) {
