@@ -48,10 +48,13 @@ import org.json.JSONObject;
 
 @Controller
 public class LoginController {
-	
+
 	//logger used to log excepions and errors
 	final static Logger logger = Logger.getLogger(LoginController.class);
 
+	/**
+	 * @return ModelAndView
+	 */
 	@RequestMapping(value="/login", method = RequestMethod.GET)
 	public ModelAndView login(){
 		//this modelview adds the object to the jsp page
@@ -59,42 +62,43 @@ public class LoginController {
 		return mv;
 	}
 
+	/**
+	 * @param username
+	 * @param password
+	 * @param user
+	 * @param result
+	 * @param request
+	 * @return ModelAndView
+	 * @throws JSONException
+	 */
 	@RequestMapping(value="loginSuccess", method = RequestMethod.POST)
 	public ModelAndView loginSuccess(@RequestParam("username") String username, @RequestParam("password") String password, 
-			 @ModelAttribute("user") User user, BindingResult result, HttpServletRequest request ) throws JSONException {
-		
-		
+			@ModelAttribute("user") User user, BindingResult result, HttpServletRequest request ) throws JSONException {
+
+		//account details variables
+		Long acctNumb = null;
+		Long acctType = null;
+		String bal = "";
+
 		//this modelview maps to the home jsp page
 		ModelAndView mv = new ModelAndView("home");
-
 		//create new properties file to parse BankService URL
-		Properties prop = new Properties();
-		try {
-			prop.load(new FileInputStream("C:\\Development\\Workspace\\OnlineBankApp\\URL.props"));
-			logger.debug(""+prop);
-		} catch (IOException ie) {
-			//log error to my log file
-			logger.error("File not found " +  ie.getMessage());
-			
-		}
-		
+		Properties prop = parseProps();
+		//create a new Http header to be used to communicate with the REST API
 		HttpHeaders httpHeaders = new HttpHeaders();
-		httpHeaders.add("Content-Type", "*/*");
-		RestTemplate rest = new RestTemplate();
-		rest.getMessageConverters().add(new StringHttpMessageConverter());
-		
+		//create new rest template to send request and retrieve the response
+		RestTemplate rest = createRestTemp(httpHeaders);
 		//Validator class validates data
 		UserValidator userValidator = new UserValidator();
 
-		user.setUsername(username);
-		user.setPassword(password);
-		
+		setUser(username, password, user);
+
 		//validates null values for username or password
 		if( userValidator.isNull(user)){
 			logger.error("User input fields contain null values");
 			return loginFailure();
 		}
-		
+
 		JSONObject 	obj = new JSONObject();	
 		boolean Exception = false;
 		try {
@@ -106,79 +110,146 @@ public class LoginController {
 		}
 
 		if(Exception == true){
-			 return loginFailure();
+			return loginFailure();
 		}
 		HttpEntity<String> entityCredentials = new HttpEntity<String>(obj.toString(), httpHeaders);
 		ResponseEntity<String> responseEntity = rest.exchange(prop.getProperty("login_url"),
 				HttpMethod.POST, entityCredentials, String.class);
 
 		String acctObject = responseEntity.getBody();
+		System.out.println(acctObject);
 		JSONObject accountDetails = new JSONObject(); 
-		
+
 		//returns exception if username or password doesn't exist
+		//this checks username or password exception
 		if(StringUtils.isBlank(acctObject)){
-			logger.error("User input contains null values");
 			return loginFailure();
 		}
+		
+			try {
 
-		//this checks username or password exception
-		try {
+				accountDetails = new JSONObject(acctObject);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				Exception = true;
+				logger.info("Someting aint right " + accountDetails);
+			}
+
+			//this checks null balance exception
+			try {
+				bal = accountDetails.getString("balance"); 
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				Exception = true;
+				logger.info("Someting aint right " + bal);
+			}
+
+			//this checks null account number exception
+			try {
+				acctNumb = accountDetails.getLong("accountNumber");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				Exception = true;
+				logger.info("Someting aint right " + acctNumb);
+			}
+
+			//this checks null account type exception
+			try {
+				 acctType = accountDetails.getLong("acctType");
+				logger.info("account type:" + acctType);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				Exception = true;
+				logger.info("Someting aint right " + acctType);
+			}
 			
-			accountDetails = new JSONObject(acctObject);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			Exception = true;
-		}
+			//If an exception is needed, return exception page
+			if(Exception == true){
+				return loginFailure();
+			}
 
-		String bal = "";
-		//this checks null balance exception
-		try {
-			bal = accountDetails.getString("balance"); 
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			Exception = true;
-		}
+		//this method takes in the user's attributes and adds them to the ModelAndView
+		showAccountDetails(username, user, mv, bal, acctNumb, acctType);
 
-		Long acctNumb = null;
-		//this checks null account number exception
-		try {
-			acctNumb = accountDetails.getLong("accountNumber");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			Exception = true;
-		}
+		return mv;
+	}
 
-		Long acctType = null;
-		//this checks null account type exception
-		try {
-			acctType = accountDetails.getLong("acctType");
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			Exception = true;
-		}
+	/**
+	 * @param username
+	 * @param password
+	 * @param user
+	 */
+	public void setUser(String username, String password, User user) {
+		user.setUsername(username);
+		user.setPassword(password);
+	}
 
-		//		request.getSession().setAttribute("username", user.getUsername());
-		//		request.getSession().setAttribute("password", user.getPassword());
-
-		//If an exception is needed, return exception page
-		if(Exception == true){
-			 return loginFailure();
-		}
-
+	/**
+	 * @param username
+	 * @param user
+	 * @param mv
+	 * @param bal
+	 * @param acctNumb
+	 * @param acctType
+	 */
+	public void showAccountDetails(String username, User user, ModelAndView mv,
+			String bal, Long acctNumb, Long acctType) {
 		mv.addObject("balMessage",  " Here is your balance: ");
-		mv.addObject("acctTypeMessage",  " Your account type: checking (100), savings(200): ");
+		mv.addObject("acctTypeMessage",  " Your account type: ");
 		mv.addObject("acctNumberMessage",  " Here is your account number: ");
 		mv.addObject("username", username);
 
 		mv.addObject("bal", bal);
 		mv.addObject("acctNumb", acctNumb);
-		mv.addObject("acctType", acctType);
+		accountType(mv, acctType);
 		mv.addObject("user",user);
+	}
 
-		return mv;
+	/**
+	 * @return Properties
+	 */
+	public Properties parseProps() {
+		Properties prop = new Properties();
+		try {
+			prop.load(new FileInputStream("C:\\Development\\Workspace\\OnlineBank\\URL.props"));
+			logger.debug(""+prop);
+		} catch (IOException ie) {
+			//log error to my log file
+			logger.error("File not found " +  ie.getMessage());
+
+		}
+		return prop;
 	}
 
 
+	/**
+	 * @param mv
+	 * @param acctType
+	 */
+	public void accountType(ModelAndView mv, Long acctType) {
+		if(acctType == 100){
+			mv.addObject("acctType", "Checking Account");
+		}
+		else if(acctType == 200){
+			mv.addObject("acctType", "Savings Account");
+		}
+	}
+
+	/**
+	 * @param httpHeaders
+	 * @return RestTemplate
+	 */
+	public RestTemplate createRestTemp(HttpHeaders httpHeaders) {
+		httpHeaders.add("Content-Type", "*/*");
+		RestTemplate rest = new RestTemplate();
+		rest.getMessageConverters().add(new StringHttpMessageConverter());
+		return rest;
+	}
+
+
+	/**
+	 * @return ModelAndView
+	 */
 	@RequestMapping(value="loginFailure", method = RequestMethod.POST)
 	public ModelAndView loginFailure(){
 		ModelAndView exception = new ModelAndView("LoginException");

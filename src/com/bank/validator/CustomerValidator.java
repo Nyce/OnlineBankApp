@@ -9,10 +9,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.bank.model.Account;
-import com.bank.model.Customer;
-import com.bank.model.Transaction;
-import com.bank.model.User;
+import com.capitalone.bank.model.Account;
+import com.capitalone.bank.model.Customer;
+import com.capitalone.bank.model.Transaction;
+import com.capitalone.bank.model.User;
 
 public class CustomerValidator implements Validator {
 
@@ -37,11 +37,11 @@ public class CustomerValidator implements Validator {
 
 
 
-		if (customer.getZip() < 00000) {
-			e.rejectValue("zip", "negativevalue");
-		} else if (customer.getZip() > 99999) {
-			e.rejectValue("zip", "too many figures");
-		}
+//		if (customer.getZip() < 00000) {
+//			e.rejectValue("zip", "negativevalue");
+//		} else if (customer.getZip() > 99999) {
+//			e.rejectValue("zip", "too many figures");
+//		}
 
 
 	}
@@ -50,7 +50,7 @@ public class CustomerValidator implements Validator {
 	public boolean isNull(Object obj){
 		Boolean	isNull = false;
 		Customer customer = (Customer) obj;
-		
+
 
 		if(StringUtils.isEmpty(customer.getEmail()) || StringUtils.isEmpty(customer.getFirstname()) || StringUtils.isEmpty(customer.getLastname())
 				|| StringUtils.isEmpty(customer.getCity()) || StringUtils.isEmpty(customer.getZip().toString()) || StringUtils.isEmpty(customer.getDob().toString())
@@ -58,9 +58,20 @@ public class CustomerValidator implements Validator {
 		{
 			isNull = true;
 		}
-		
-	
+
+
 		return isNull;
+	}
+
+	public static void main(String[] args) {
+		
+		try{
+			
+		}
+		
+		catch(Exception e){
+			
+		}
 	}
 
 }

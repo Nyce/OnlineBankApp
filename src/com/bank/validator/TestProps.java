@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.bank.model.Customer;
+import com.capitalone.bank.model.Customer;
 
 public class TestProps {
 

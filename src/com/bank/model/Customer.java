@@ -23,7 +23,7 @@ public class Customer {
 	@NotNull
 	@Min(5)
 	@Max(5)
-	private Long zip;
+	private String zip;
 	@NotNull
 	private String email;
 	@NotNull
@@ -67,10 +67,10 @@ public class Customer {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public Long getZip() {
+	public String getZip() {
 		return zip;
 	}
-	public void setZip(Long zip) {
+	public void setZip(String zip) {
 		this.zip = zip;
 	}
 	public String getEmail() {

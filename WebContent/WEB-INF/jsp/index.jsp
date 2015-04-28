@@ -1,7 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!doctype html>
 <html>
-<!-- -->  
+<!-- -->
 
 <div id="wrapperHeader">
 	<div id="header">
@@ -22,8 +22,7 @@
 
 <style>
 body {
-	background-image: url('http://crunchify.com/bg.png'); 
-	
+	background-image: url('http://crunchify.com/bg.png');
 }
 
 .wrapper {
@@ -34,6 +33,21 @@ body {
 .content {
 	/* padding the footer adds 40 to footer height */
 	padding-bottom: 140px;
+}
+
+#head {
+	position: relative;
+	left: 450px;
+}
+
+
+#login {
+	position: relative;
+	left: 500px;
+}
+#register {
+	position: relative;
+	left: 300px;
 }
 
 #footer {
@@ -53,19 +67,21 @@ body {
 </head>
 
 <body>
-	<h2>Welcome to Capital One 360</h2>
+	<h2 ><span id="head">Welcome to Capital One 360</span></h2>
 	<br>
 	<br>
-  <div style="font-family: verdana; padding: 10px; border-radius: 10px; font-size: 18px;"> 
+	<div
+		 
+		style= "text-align: center; font-family: verdana; padding: 10px; border-radius: 10px; font-size: 18px;">
 
-	<table>
-		<tr>
-			<td><a href="register">${openAccountMessage }</a></td>
-			<td><a href="login">${loginMessage}</a></td>
-		</tr>
-	</table>
+		<table>
+			<tr>
+				<td><span id="register"><a href="register">${openAccountMessage }</a></span></td>
+				<td><span id="login"><a href="login">${loginMessage}</a></span></td>
+			</tr>
+		</table>
 	</div>
-	
+
 
 </body>
 </html>

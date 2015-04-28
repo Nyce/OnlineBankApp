@@ -9,8 +9,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.bank.model.Customer;
 import com.bank.model.User;
+
 
 public class UserValidator implements Validator {
 

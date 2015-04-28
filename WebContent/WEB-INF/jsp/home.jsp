@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!doctype html>
-<html> 
+<html>
 
 <div id="wrapperHeader">
 	<div id="header">
@@ -58,7 +59,7 @@ body {
 	<br>
 	<p></p>
 	<!--<div style="text-align: center">-->
-	<form name="acctDetails" action="transfer">
+	<form:form name="acctDetails" action="transfer">
 		<table>
 			<tr>
 				<td>${balMessage}</td>
@@ -76,19 +77,12 @@ body {
 			</tr>
 
 		</table>
-		<br> <br> <a href="LogOut/">Log Out</a>
+		<br> <br> <a href="transfer/${acctNumb}">Transfer Funds</a> <a href="LogOut/">Log
+			Out</a>
 
-		<!--  	<form name="acctDetails" action="withdrawal" >
-			
-					<input type="hidden"  name="customerid" value= "${acctNumb}" readonly>
-					<input type="submit" value="withdrawal" name="Withdrawal" />
-					</form>
-					<br>
-					<input type="submit" value="Transfer"
-			name="transfer" /> 
-					
+							
 			<!--<a href="transfer/" >Transfer Funds</a> -->
-	</form>
+	</form:form>
 	<!--</div>-->
 
 </body>

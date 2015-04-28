@@ -4,7 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import com.bank.model.Account;
+import com.capitalone.bank.model.Account;
 
 public class AccountValidator implements Validator{
 

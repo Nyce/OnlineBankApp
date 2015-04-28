@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!doctype html>
 <html>
 <div id="wrapperHeader">
@@ -42,7 +43,6 @@ body {
 	left: 0px;
 	right: 0px;
 	margin-bottom: 0px;
-	
 }
 </style>
 <script type="text/javascript">
@@ -101,7 +101,9 @@ body {
 				type="hidden" name="hiddenBalance" />
 		</p>
 	</form>
-<br>
-<p> <b>Don't have an account yet? </b><a href="register">Register here</a></p>
+	<br>
+	<p>
+		<b>Don't have an account yet? </b><a href="register">Register here</a>
+	</p>
 </body>
 </html>
